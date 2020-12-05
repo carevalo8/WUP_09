@@ -50,6 +50,12 @@ pairs(Fishies)
 ```
 
 
+```{r}
+Fishies=filter(fishD, Species=="Bream")
+Fishies = select(Fishies, -Species)
+pairs(Fishies)
+```
+
 
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
@@ -75,6 +81,16 @@ summary(fishPerch)
   According to the summary above, we can see that the Adjusted R-Squared is 0.9645.
 
 
+
+```{r}
+fishBream=lm(Weight~Length2+Width,data=Fishies)
+summary(fishBream)
+```
+  
+  For Bream, we can see an Adjusted R-Squared of 0.9116.
+
+
+
 ```{r}
 library(leaps)
 regsubsets.out <-
@@ -92,6 +108,26 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 ```
 
   By looking at the model above, we can see that the best two explanatory variables are Height and Width at an Adjusted R-Squared of about 0.94, which is very close to the Ajusted R-Squared of 0.9645 that we saw above. 
+
+
+
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Fishies,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+
+  When it comes to Bream according to the model above, the best two explanatory variables for determining weight are Length2 and Height with an Adjusted R-Squared of about 0.936. 
 
 
 

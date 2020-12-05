@@ -44,23 +44,23 @@ fishD = read.csv("Fish.csv")
 ### Graphical Descriptive Results
 
 ```{r}
-Fishies=filter(fishD, Species=="Perch")
-Fishies = select(Fishies, -Species)
-pairs(Fishies)
+FishiesP=filter(fishD, Species=="Perch")
+FishiesP= select(FishiesP, -Species)
+pairs(FishiesP)
 ```
 
 
 ```{r}
-Fishies=filter(fishD, Species=="Bream")
-Fishies = select(Fishies, -Species)
-pairs(Fishies)
+FishiesB=filter(fishD, Species=="Bream")
+FishiesB= select(FishiesB, -Species)
+pairs(FishiesB)
 ```
 
 
 ```{r}
-Fishies=filter(fishD, Species=="Smelt")
-Fishies = select(Fishies, -Species)
-pairs(Fishies)
+FishiesS=filter(fishD, Species=="Smelt")
+FishiesS= select(FishiesS, -Species)
+pairs(FishiesS)
 ```
 
 
@@ -73,14 +73,16 @@ pairs(Fishies)
 ### Numerical Descriptive Results
 
 ```{r}
-summary(Fishies)
+summary(FishiesP)
+summary(FishiesB)
+summary(FishiesS)
 ```
 
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ```{r}
-fishPerch=lm(Weight~Length2+Width,data=Fishies)
+fishPerch=lm(Weight~Length2+Width,data=FishiesP)
 summary(fishPerch)
 ```
 
@@ -89,14 +91,14 @@ summary(fishPerch)
 
 
 ```{r}
-fishBream=lm(Weight~Length2+Width,data=Fishies)
+fishBream=lm(Weight~Length2+Width,data=FishiesB)
 summary(fishBream)
 ```
   
   For Bream, we can see an Adjusted R-Squared of 0.9116.
 
 ```{r}
-fishSmelt=lm(Weight~Length2+Width,data=Fishies)
+fishSmelt=lm(Weight~Length2+Width,data=FishiesS)
 summary(fishSmelt)
 ```
 When looking at the numerical summary for Smelt, we can see an Adjusted R-Squared of 0.9465.
@@ -106,7 +108,7 @@ When looking at the numerical summary for Smelt, we can see an Adjusted R-Square
 library(leaps)
 regsubsets.out <-
     regsubsets(Weight ~ .,
-               data = Fishies,
+               data = FishiesP,
                nbest = 1,       # 1 best model for each number of predictors
                nvmax = NULL,    # NULL for no limit on number of variables
                force.in = NULL, force.out = NULL,
@@ -126,7 +128,7 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 library(leaps)
 regsubsets.out <-
     regsubsets(Weight ~ .,
-               data = Fishies,
+               data = FishiesB,
                nbest = 1,       # 1 best model for each number of predictors
                nvmax = NULL,    # NULL for no limit on number of variables
                force.in = NULL, force.out = NULL,
@@ -145,7 +147,7 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 library(leaps)
 regsubsets.out <-
     regsubsets(Weight ~ .,
-               data = Fishies,
+               data = FishiesS,
                nbest = 1,       # 1 best model for each number of predictors
                nvmax = NULL,    # NULL for no limit on number of variables
                force.in = NULL, force.out = NULL,
@@ -170,5 +172,11 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 
    We used three models to predict the weight of these fish.
    
+   For Perch, we could see that the best two explanatory variables we can use to determine weight are Height and Width.
    
+   
+   For Bream, the best two explanatory variables for determining weight are Length2 and Height.
+   
+   
+   For Smelt, the best two explanatory variables we could use to determine weight are Length2 and Width.
    

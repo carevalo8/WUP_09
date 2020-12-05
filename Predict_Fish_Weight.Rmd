@@ -33,6 +33,8 @@ fishD = read.csv("Fish.csv")
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
 
+ In order to predict weight, we will use numerical~numerical due to the variables we are looking at, since they are all numerical explanatory variables.
+ 
 #Results
 
 <!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
@@ -40,6 +42,15 @@ fishD = read.csv("Fish.csv")
 ## Descriptive Results
 
 ### Graphical Descriptive Results
+
+```{r}
+Fishies=filter(fishD, Species=="Perch")
+Fishies = select(Fishies, -Species)
+pairs(Fishies)
+```
+
+
+
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
@@ -49,7 +60,40 @@ fishD = read.csv("Fish.csv")
 
 ### Numerical Descriptive Results
 
+```{r}
+summary(Fishies)
+```
+
+
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+
+```{r}
+fishPerch=lm(Weight~Length2+Width,data=Fishies)
+summary(fishPerch)
+```
+
+  According to the summary above, we can see that the Adjusted R-Squared is 0.9645.
+
+
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Fishies,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+
+  By looking at the model above, we can see that the best two explanatory variables are Height and Width at an Adjusted R-Squared of about 0.94, which is very close to the Ajusted R-Squared of 0.9645 that we saw above. 
+
+
 
 ## Inferential Results
 
@@ -59,3 +103,8 @@ fishD = read.csv("Fish.csv")
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+
+   We used three models to predict the weight of these fish.
+   
+   
+   
